@@ -41,7 +41,7 @@ if (isset($_POST["addInvoice"]))
 
 		for ($a = 0; $a < count($_POST["Medication"]); $a++)
 		{
-			$sql = "INSERT INTO tblprescription (patientID, prescID, Medication, Type, Morning, Noon, Evening, Duration) VALUES ('$patientID', '$prescID', '" . $_POST["Medication"][$a] . "', '" . $_POST["Type"][$a] . "', '" . $_POST["Morning"][$a] . "', '" . $_POST["Noon"][$a] . "', '" . $_POST["Evening"][$a] . "', '" . $_POST["Duration"][$a] . "')";
+			$sql = "INSERT INTO tblprescription (patientID, prescID, Medication, Type, Quantity, morningBM, morningAM, afternoonBM, afternoonAM, eveningBM, eveningAM, duration, instructions) VALUES ('$patientID', '$prescID', '" . $_POST["Medication"][$a] . "', '" . $_POST["Type"][$a] . "', '" . $_POST["Quantity"][$a] . "', '" . $_POST["morningBM"][$a] . "', '" . $_POST["morningAM"][$a] . "', '" . $_POST["afternoonBM"][$a] . "', '" . $_POST["afternoonAM"][$a] . "', '" . $_POST["eveningBM"][$a] . "', '" . $_POST["eveningAM"][$a] . "', '" . $_POST["duration"][$a] . "', '" . $_POST["instructions"][$a] . "')";
 			mysqli_query($con, $sql);
 		}
 
@@ -96,17 +96,16 @@ if (isset($_POST["addInvoice"]))
                 <li class="nav-header">
                     <div class="dropdown profile-element">
                         <img alt="image" class="rounded-circle" src="insp/img/New Project.png"/>
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="block m-t-xs font-bold">Rochelle Abeleda</span>
-                            <span class="text-muted text-xs block">Doctor <b class="caret"></b></span>
-                        </a>
-                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                            <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
-                            <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
-                            <li class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="login.html">Logout</a></li>
-                        </ul>
+                        <?php $query=mysqli_query($con,"select * from users where id='".$_SESSION['id']."'");
+															while($row=mysqli_fetch_array($query))
+															{ ?>
+
+
+                            <span class="block m-t-xs font-bold"><?php echo $row['fullName']; ?></span>
+                            <span class="text-muted text-xs block"><?php echo $row['role']; ?></span>
+
+
+													<?php } ?>
                     </div>
                     <div class="logo-element">
                         CA
@@ -117,14 +116,9 @@ if (isset($_POST["addInvoice"]))
 
                 </li>
                 <li class="active">
-                    <a href="#"><i class="fa fa-table"></i> <span class="nav-label">Patients</span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level collapse">
-                        <li class="active"><a href="manage-patient.php">Patient Records</a></li>
-                        <li><a href="doctor-treatment-records.html">Treatment Records</a></li>
-                        <li><a href="doctor-prescription-records.html">Prescription Records</a></li>
+  									<a href="manage-patient.php"><i class="fa fa-table"></i> <span class="nav-label">Patient Records</span></a>
 
-                    </ul>
-                </li>
+  							</li>
                 <li>
                     <a href="doctor-approved-appointments.html"><i class="fa fa-calendar"></i> <span class="nav-label">Appointments</span>  </a>
                 </li>
@@ -153,7 +147,7 @@ if (isset($_POST["addInvoice"]))
 
 
             <li>
-                <a href="login.html">
+                <a href="logout.php">
                     <i class="fa fa-sign-out"></i> Log out
                 </a>
             </li>
@@ -270,15 +264,25 @@ if (isset($_POST["addInvoice"]))
 
 <form method="POST" action="">
                             <table class="table table-bordered" id="myTable">
-                                <thead>
+                                <thead style="text-align:center">
                                 <tr>
-                                    <th>Medication</th>
-                                    <th>Type</th>
-                                    <th>Morning</th>
-                                    <th>Noon</th>
-                                    <th>Evening</th>
-                                    <th>Duration</th>
-                                    <th>Action</th>
+                                  <th rowspan="2" style="vertical-align:middle; width:20%">Medication</th>
+                                  <th rowspan="2" style="vertical-align:middle; width:10%">Type</th>
+                                  <th rowspan="2" style="vertical-align:middle; width:5%">Quantity</th>
+                                  <th colspan="2" style="vertical-align:middle; width:10%">Morning</th>
+                                  <th colspan="2" style="vertical-align:middle; width:10%">Afternoon</th>
+                                  <th colspan="2" style="vertical-align:middle; width:10%">Night</th>
+                                  <th rowspan="2" style="vertical-align:middle; width:10%">Duration</th>
+                                  <th rowspan="2" style="vertical-align:middle; width:20%">Instructions</th>
+                                  <th rowspan="2" style="vertical-align:middle; width:5%">Actions</th>
+                                </tr>
+                                <tr>
+                                  <td style="vertical-align:middle; width:5%"><b>BM</b></td>
+                                  <td style="vertical-align:middle; width:5%"><b>AM</b></td>
+                                  <td style="vertical-align:middle; width:5%"><b>BM</b></td>
+                                  <td style="vertical-align:middle; width:5%"><b>AM</b></td>
+                                  <td style="vertical-align:middle; width:5%"><b>BM</b></td>
+                                  <td style="vertical-align:middle; width:5%"><b>AM</b></td>
                                 </tr>
                                 </thead>
                                 <tbody id="tbody">
@@ -345,13 +349,21 @@ if (isset($_POST["addInvoice"]))
 
 		var html = "<tr>";
 			// html += "<td>" + items + "</td>";
-			html += "<td><input type='text' name='Medication[]'></td>";
-			html += "<td><input type='text' name='Type[]'></td>";
-      html += "<td><input type='text' name='Morning[]'></td>";
-      html += "<td><input type='text' name='Noon[]'></td>";
-      html += "<td><input type='text' name='Evening[]'></td>";
-      html += "<td><input type='text' name='Duration[]'></td>";
-      html += "<td><a href='#' class='btn btn-white btn-sm' onclick='deleteRow(this)'><i class='fa fa-trash'></i> Remove </a></td>";
+			// html += "<td><input type='text' name='Medication[]'></td>";
+
+      html += "<td style='width:20%'><input type='text'  style='width:100%' name='Medication[]'></td>";
+	    html += "<td style='width:10%'><input type='text'  style='width:100%' name='Type[]'></td>";
+      html += "<td style='width:5%'><input type='text' style='width:100%' name='Quantity[]'></td>";
+      html += "<td style='width:5%'><input type='text' style='width:100%' name='morningBM[]'></td>";
+      html += "<td style='width:5%'><input type='text' style='width:100%' name='morningAM[]'></td>";
+      html += "<td style='width:5%'><input type='text' style='width:100%' name='afternoonBM[]'></td>";
+      html += "<td style='width:5%'><input type='text' style='width:100%' name='afternoonAM[]'></td>";
+      html += "<td style='width:5%'><input type='text' style='width:100%' name='eveningBM[]'></td>";
+      html += "<td style='width:5%'><input type='text' style='width:100%' name='eveningAM[]'></td>";
+      html += "<td style='width:10%'><input type='text' style='width:100%' name='duration[]'></td>";
+      html += "<td style='width:20%'><input type='text' style='width:100%' name='instructions[]'></td>";
+
+      html += "<td style='width:5%'><a href='#' class='btn btn-white btn-sm' onclick='deleteRow(this)' style='width:100%'><i class='fa fa-trash'></i></a></td>";
 		html += "</tr>";
 
 		var row = document.getElementById("tbody").insertRow();

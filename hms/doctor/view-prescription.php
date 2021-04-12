@@ -96,17 +96,16 @@ if (isset($_POST["addInvoice"]))
                 <li class="nav-header">
                     <div class="dropdown profile-element">
                         <img alt="image" class="rounded-circle" src="insp/img/New Project.png"/>
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="block m-t-xs font-bold">Rochelle Abeleda</span>
-                            <span class="text-muted text-xs block">Doctor <b class="caret"></b></span>
-                        </a>
-                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                            <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
-                            <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
-                            <li class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="login.html">Logout</a></li>
-                        </ul>
+                        <?php $query=mysqli_query($con,"select * from users where id='".$_SESSION['id']."'");
+															while($row=mysqli_fetch_array($query))
+															{ ?>
+
+
+                            <span class="block m-t-xs font-bold"><?php echo $row['fullName']; ?></span>
+                            <span class="text-muted text-xs block"><?php echo $row['role']; ?></span>
+
+
+													<?php } ?>
                     </div>
                     <div class="logo-element">
                         CA
@@ -117,14 +116,9 @@ if (isset($_POST["addInvoice"]))
 
                 </li>
                 <li class="active">
-                    <a href="#"><i class="fa fa-table"></i> <span class="nav-label">Patients</span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level collapse">
-                        <li class="active"><a href="manage-patient.php">Patient Records</a></li>
-                        <li><a href="doctor-treatment-records.html">Treatment Records</a></li>
-                        <li><a href="doctor-prescription-records.html">Prescription Records</a></li>
+  									<a href="manage-patient.php"><i class="fa fa-table"></i> <span class="nav-label">Patient Records</span></a>
 
-                    </ul>
-                </li>
+  							</li>
                 <li>
                     <a href="doctor-approved-appointments.html"><i class="fa fa-calendar"></i> <span class="nav-label">Appointments</span>  </a>
                 </li>
@@ -153,7 +147,7 @@ if (isset($_POST["addInvoice"]))
 
 
             <li>
-                <a href="login.html">
+                <a href="logout.php">
                     <i class="fa fa-sign-out"></i> Log out
                 </a>
             </li>
@@ -242,6 +236,16 @@ if (isset($_POST["addInvoice"]))
 								<?php }?>
             </div>
 
+
+
+            <?php
+            $prescid=$_GET['prescid'];
+            $ret=mysqli_query($con,"select * from tblprescription where prescID='$prescid'");
+
+
+
+            ?>
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox ">
@@ -249,9 +253,10 @@ if (isset($_POST["addInvoice"]))
                             <h5>Prescription</h5>
                             <div class="ibox-tools">
 
-                                <button class="btn btn-success btn-xs">
+                                <a href="print-prescription.php?viewid=<?php echo $vid;?>&prescid=<?php echo $prescid;?>" target="_blank"><button class="btn btn-success btn-xs">
+
                                     Print
-                                </button>
+                                </button></a>
                             </div>
                         </div>
 
@@ -262,29 +267,33 @@ if (isset($_POST["addInvoice"]))
 
                         <div class="ibox-content">
 
-                          <?php
-                          $prescid=$_GET['prescid'];
-                          $ret=mysqli_query($con,"select * from tblprescription where prescID='$prescid'");
 
-
-
-                          ?>
 
 
 
 
                             <table class="table table-bordered" id="myTable">
-                                <thead>
-                                <tr>
-                                    <th>Medication</th>
-                                    <th>Type</th>
-                                    <th>Morning</th>
-                                    <th>Noon</th>
-                                    <th>Evening</th>
-                                    <th>Duration</th>
+                              <thead style="text-align:center">
+                              <tr>
+                                <th rowspan="2" style="vertical-align:middle; width:20%">Medication</th>
+                                <th rowspan="2" style="vertical-align:middle; width:10%">Type</th>
+                                <th rowspan="2" style="vertical-align:middle; width:5%">Quantity</th>
+                                <th colspan="2" style="vertical-align:middle; width:10%">Morning</th>
+                                <th colspan="2" style="vertical-align:middle; width:10%">Afternoon</th>
+                                <th colspan="2" style="vertical-align:middle; width:10%">Night</th>
+                                <th rowspan="2" style="vertical-align:middle; width:10%">Duration</th>
+                                <th rowspan="2" style="vertical-align:middle; width:25%">Instructions</th>
 
-                                </tr>
-                                </thead>
+                              </tr>
+                              <tr>
+                                <td style="vertical-align:middle; width:5%"><b>BM</b></td>
+                                <td style="vertical-align:middle; width:5%"><b>AM</b></td>
+                                <td style="vertical-align:middle; width:5%"><b>BM</b></td>
+                                <td style="vertical-align:middle; width:5%"><b>AM</b></td>
+                                <td style="vertical-align:middle; width:5%"><b>BM</b></td>
+                                <td style="vertical-align:middle; width:5%"><b>AM</b></td>
+                              </tr>
+                              </thead>
                                 <tbody id="tbody">
 
                                   <?php
@@ -293,11 +302,17 @@ while ($row=mysqli_fetch_array($ret)) {
 
                                 <tr>
                                     <td><?php  echo $row['Medication'];?></td>
-                                    <td><?php  echo $row['Type'];?></td>
-                                    <td><?php  echo $row['Morning'];?></td>
-                                    <td><?php  echo $row['Noon'];?></td>
-                                    <td><?php  echo $row['Evening'];?></td>
-                                    <td><?php  echo $row['Duration'];?></td>
+                                    <td style="text-align:center"><?php  echo $row['Type'];?></td>
+                                    <td style="text-align:center"><?php  echo $row['Quantity'];?></td>
+                                    <td style="text-align:center"><?php  echo $row['morningBM'];?></td>
+                                    <td style="text-align:center"><?php  echo $row['morningAM'];?></td>
+                                    <td style="text-align:center"><?php  echo $row['afternoonBM'];?></td>
+                                    <td style="text-align:center"><?php  echo $row['afternoonAM'];?></td>
+                                    <td style="text-align:center"><?php  echo $row['eveningBM'];?></td>
+                                    <td style="text-align:center"><?php  echo $row['eveningAM'];?></td>
+                                    <td style="text-align:center"><?php  echo $row['duration'];?></td>
+                                    <td><?php  echo $row['instructions'];?></td>
+
 
                                 </tr>
 <?php } ?>
@@ -352,7 +367,7 @@ while ($row=mysqli_fetch_array($ret)) {
 
             <div style="text-align: center; padding: 10px;">
                 <a type="button" class="btn btn-danger" href="view-patient.php?viewid=<?php echo $vid;?>" >Back</a>
-                
+
             </div>
 
 
