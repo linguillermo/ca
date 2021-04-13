@@ -35,9 +35,9 @@
                         <li><a class="nav-link page-scroll" href="#services">Services</a></li>
 						<li><a class="nav-link page-scroll" href="#appointment">Appointment</a></li>
 						<li><a class="nav-link page-scroll" href="#team">About Us</a></li>
-                        
+
                         <li><a class="nav-link page-scroll" href="#contact">Contact</a></li>
-                        
+
                     </ul>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                     <p>Providing supportive care for your dermatological needs</p>
                     <p>
                         <a class="btn btn-lg btn-primary page-scroll" href="#appointment" role="button">MAKE AN APPOINTMENT</a>
-                        
+
                     </p>
                 </div>
 
@@ -69,7 +69,7 @@
         </div>
 
     </div>
-    
+
 </div>
 
 
@@ -78,22 +78,22 @@
         <div class="col-sm-3">
             <h2>Consultation</h2>
             <p>Guides you towards the specific medical services needed to improve your health.</p>
-            
+
         </div>
         <div class="col-sm-3">
             <h2>Partial Ungiectomy</h2>
             <p>Surgical removal of a portion of a fingernail or toenail which causes pain or discomfort.</p>
-            
+
         </div>
         <div class="col-sm-3">
             <h2>Steroid Injection</h2>
             <p>Treatment that delivers a high dose of medication that can help relieve pain and inflammation in a specific area of your body.</p>
-            
+
         </div>
         <div class="col-sm-3">
             <h2>Mole removal</h2>
             <p>Removal of cosmetic moles, skin tags and other benign skin growths.</p>
-            
+
         </div>
     </div>
 </section>
@@ -109,12 +109,12 @@
     <div class="row">
         <div class="col-md-3 wow fadeInLeft">
             <div >
-                
+
                 <h2>Sweatox </h2>
                 <p>Relatively pain-free treatment that helps to reduce excess sweating of the underarms.</p>
             </div>
             <div class="m-t-lg">
-                
+
                 <h2>Acne Treatment</h2>
                 <p>Provides effective medical and laser acne treatments to overcome your skin concerns.</p>
             </div>
@@ -124,18 +124,18 @@
         </div>
         <div class="col-md-3 text-right wow fadeInRight">
             <div>
-                
+
                 <h2>Excision Biopsy</h2>
                 <p>Surgical removal of an entire tumor and some normal tissue around it.</p>
             </div>
             <div class="m-t-lg">
-                
+
                 <h2>Punch Biopsy</h2>
                 <p>Procedure that acquires tissue for laboratory examination by taking a punch-size piece of skin from the body.</p>
             </div>
         </div>
     </div>
-    
+
 </section>
 
 <section class="container services">
@@ -143,22 +143,22 @@
         <div class="col-sm-3">
             <h2>Fractional RF</h2>
             <p>Revolutionary treatment that visibly tightens your skin and reduces the signs of ageing.</p>
-            
+
         </div>
         <div class="col-sm-3">
             <h2>IPL </h2>
             <p>Treatment that removes age spots, sun damage, freckles, birthmarks, varicose veins, wrinkle treatment and wrinkle reduction, rosacea, and unwanted body hair.</p>
-            
+
         </div>
         <div class="col-sm-3">
             <h2>Electocauttery</h2>
             <p>Procedure that uses heat to destroy abnormal cell mass, such as a tumor or other lesion.</p>
-            
+
         </div>
         <div class="col-sm-3">
             <h2>Mole removal</h2>
             <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus.</p>
-            
+
         </div>
     </div>
 </section>
@@ -631,7 +631,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12 text-center">
-                
+
                 <p class="m-t-sm">
                     Follow us on social platform
                 </p>
@@ -720,6 +720,30 @@
     new WOW().init();
 
 </script>
+<!-- Chat Code Start -->
+<!-- Load Facebook SDK for JavaScript -->
+      <div id="fb-root"></div>
+      <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            xfbml            : true,
+            version          : 'v10.0'
+          });
+        };
 
+        (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+
+      <!-- Your Chat Plugin code -->
+      <div class="fb-customerchat"
+        attribution="setup_tool"
+        page_id="103559001863075">
+      </div>
+<!-- Chat Code End -->
 </body>
 </html>
