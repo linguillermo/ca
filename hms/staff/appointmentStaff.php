@@ -1,5 +1,11 @@
 <?php
+session_start();
+error_reporting(0);
+require "include/aes256.php";
+include('include/config.php');
+include('include/checklogin.php');
 include_once 'dbconnect.php';
+check_login();
 
 ?>
 
@@ -36,46 +42,43 @@ include_once 'dbconnect.php';
                 <ul class="nav metismenu" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element">
-                            <img alt="image" class="rounded-circle" src="../img/New Project.png"/>
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <span class="block m-t-xs font-bold">Anna Santos</span>
-                                <span class="text-muted text-xs block">Staff<b class="caret"></b></span>
-                            </a>
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                                <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
-                                <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="login.html">Logout</a></li>
-                            </ul>
-                        </div>
+                          <img alt="image" class="rounded-circle" src="insp/img/New Project.png"/>
+                          <?php $query=mysqli_query($con,"select * from users where id='".$_SESSION['id']."'");
+                              while($row=mysqli_fetch_array($query))
+                              { ?>
+
+
+                            <span class="block m-t-xs font-bold"><?php echo $row['fullName']; ?></span>
+                            <span class="text-muted text-xs block"><?php echo $row['role']; ?></span>
+
+
+                          <?php } ?>
+                      </div>
                         <div class="logo-element">
                             CA
                         </div>
                     </li>
                     <li>
-                        <a href="staff-dashboard.html"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
+                        <a href="dashboard.php"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
 
                     </li>
                     <li>
-                        <a href="staff-patient-records.html"><i class="fa fa-table"></i> <span class="nav-label">Patients</span></a>
+                        <a href="manage-patient.php"><i class="fa fa-id-card"></i> <span class="nav-label">Patient Records</span></a>
 
                     </li>
 
-                    <li class="active">
-                      <a href="#"><i class="fa fa-calendar"></i> <span class="nav-label">Appointments</span><span class="fa arrow"></span></a>
-                      <ul class="nav nav-second-level collapse">
-                          <li class="active"><a href="appointmentStaff.php">Appointment List</a></li>
-                          <li><a href="addSchedule.php">Doctor Schedule</a></li>
-                      </ul>
-                    </li>
+    								<li class="active">
+    									<a href="#"><i class="fa fa-calendar"></i> <span class="nav-label">Appointments</span><span class="fa arrow"></span></a>
+    									<ul class="nav nav-second-level collapse">
+    											<li class= "active"><a href="appointmentStaff.php">Appointment List</a></li>
+    											<li><a href="addSchedule.php">Manage Schedule</a></li>
+    									</ul>
+    								</li>
 
                     <li>
-                        <a href="#"><i class="fa fa-table"></i> <span class="nav-label">Medicine Stocks</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li><a href="../inventory.php">Medicines</a></li>
-                            <li class="active"><a href="staff-stocks.html">Stocks</a></li>
-                        </ul>
+
+                        <a href="manage-medicines.php"><i class="fa fa-medkit"></i> <span class="nav-label">Medicine Stocks</span></a>
+
                     </li>
                 </ul>
 
@@ -98,7 +101,7 @@ include_once 'dbconnect.php';
                 <span class="m-r-sm text-muted welcome-message">Welcome to Clinica Abeleda</span>
             </li>
             <li>
-                <a href="login.html">
+                <a href="logout.php">
                     <i class="fa fa-sign-out"></i> Log out
                 </a>
             </li>
@@ -125,7 +128,6 @@ include_once 'dbconnect.php';
                                                    <th><input type="text" class="form-control" placeholder="Last  Name" disabled></th>
                                                    <th><input type="text" class="form-control" placeholder="Contact #" disabled></th>
                                                    <th><input type="text" class="form-control" placeholder="Reason for Appointment" disabled></th>
-                                                   <th><input type="text" class="form-control" placeholder="Day" disabled></th>
                                                    <th><input type="text" class="form-control" placeholder="Date" disabled></th>
                                                    <th><input type="text" class="form-control" placeholder="Start" disabled></th>
                                                    <th><input type="text" class="form-control" placeholder="End" disabled></th>
@@ -162,11 +164,10 @@ include_once 'dbconnect.php';
                                                echo "<tbody>";
                                                echo "<tr class='$status'>";
 
-                                                   echo "<td>" . $appointment['firstName'] . "</td>";
-                                                   echo "<td>" . $appointment['lastName'] . "</td>";
-                                                   echo "<td>" . $appointment['contactNo'] . "</td>";
+                                                   echo "<td>" . decryptthis($appointment['firstName'], key) . "</td>";
+                                                   echo "<td>" . decryptthis($appointment['lastName'], key) . "</td>";
+                                                   echo "<td>" . decryptthis($appointment['contactNo'], key) . "</td>";
                                                    echo "<td>" . $appointment['appComment'] . "</td>";
-                                                   echo "<td>" . $appointment['scheduleDay'] . "</td>";
                                                    echo "<td>" . $appointment['scheduleDate'] . "</td>";
                                                    echo "<td>" . $appointment['startTime'] . "</td>";
                                                    echo "<td>" . $appointment['endTime'] . "</td>";
@@ -185,7 +186,7 @@ include_once 'dbconnect.php';
                                        echo "</div>";
                                        echo "</div>";
                                        ?>
-                  
+
                                        <!-- <table>
                                        <tr>
                                         <td colspan="5">

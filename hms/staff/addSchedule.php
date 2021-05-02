@@ -1,5 +1,10 @@
 <?php
+session_start();
+error_reporting(0);
+include('include/config.php');
+include('include/checklogin.php');
 include_once 'dbconnect.php';
+check_login();
 // include_once 'connection/server.php';
 
 // $res=mysqli_query($con,"SELECT * FROM doctor");
@@ -8,12 +13,22 @@ include_once 'dbconnect.php';
 
 
 if (isset($_POST['submit'])) {
+
+$username=$_SESSION['login'];
+$userid = $_GET['userid'];
+$userip = "Added Appointment Schedule";
+$status = "1";
+
+
 $date = mysqli_real_escape_string($con,$_POST['date']);
 $scheduleday  = mysqli_real_escape_string($con,$_POST['scheduleday']);
 $starttime     = mysqli_real_escape_string($con,$_POST['starttime']);
 $endtime     = mysqli_real_escape_string($con,$_POST['endtime']);
 $bookavail         = mysqli_real_escape_string($con,$_POST['bookavail']);
 
+
+$log = "INSERT INTO userlog (uid,username,userip,status)
+         VALUES ('$uId','$username','$userip','$status')";
 //INSERT
 $query = " INSERT INTO doctorschedule (  scheduleDate, scheduleDay, startTime, endTime,  bookAvail)
 VALUES ( '$date', '$scheduleday', '$starttime', '$endtime', '$bookavail' ) ";
@@ -26,6 +41,7 @@ if( $result )
 <script type="text/javascript">
 alert('Schedule added successfully.');
 </script>
+<?php mysqli_query($con,$log); ?>
 <?php
 }
 else
@@ -74,46 +90,43 @@ alert('Added fail. Please try again.');
                 <ul class="nav metismenu" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element">
-                            <img alt="image" class="rounded-circle" src="../img/New Project.png"/>
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <span class="block m-t-xs font-bold">Anna Santos</span>
-                                <span class="text-muted text-xs block">Staff<b class="caret"></b></span>
-                            </a>
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                                <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
-                                <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="login.html">Logout</a></li>
-                            </ul>
-                        </div>
+                          <img alt="image" class="rounded-circle" src="insp/img/New Project.png"/>
+                          <?php $query=mysqli_query($con,"select * from users where id='".$_SESSION['id']."'");
+                              while($row=mysqli_fetch_array($query))
+                              { ?>
+
+
+                            <span class="block m-t-xs font-bold"><?php echo $row['fullName']; ?></span>
+                            <span class="text-muted text-xs block"><?php echo $row['role']; ?></span>
+
+
+                          <?php } ?>
+                      </div>
                         <div class="logo-element">
                             CA
                         </div>
                     </li>
                     <li>
-                        <a href="staff-dashboard.html"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
+                        <a href="dashboard.php"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
 
                     </li>
                     <li>
-                        <a href="staff-patient-records.html"><i class="fa fa-table"></i> <span class="nav-label">Patients</span></a>
+                        <a href="manage-patient.php"><i class="fa fa-id-card"></i> <span class="nav-label">Patient Records</span></a>
 
                     </li>
 
-                    <li class="active">
-                      <a href="#"><i class="fa fa-calendar"></i> <span class="nav-label">Appointments</span><span class="fa arrow"></span></a>
-                      <ul class="nav nav-second-level collapse">
-                          <li><a href="appointmentStaff.php">Appointment List</a></li>
-                          <li class="active"><a href="addSchedule.php">Doctor Schedule</a></li>
-                      </ul>
-                    </li>
+    								<li class="active">
+    									<a href="#"> <i class="fa fa-calendar"></i> <span class="nav-label">Appointments</span><span class="fa arrow"></span></a>
+    									<ul class="nav nav-second-level collapse">
+    											<li><a href="appointmentStaff.php">Appointment List</a></li>
+    											<li class= "active"><a href="addSchedule.php">Manage Schedule</a></li>
+    									</ul>
+    								</li>
 
                     <li>
-                        <a href="#"><i class="fa fa-table"></i> <span class="nav-label">Medicine Stocks</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li><a href="">Medicines</a></li>
-                            <li class="active"><a href="staff-stocks.html">Stocks</a></li>
-                        </ul>
+
+                        <a href="manage-medicines.php"><i class="fa fa-medkit"></i> <span class="nav-label">Medicine Stocks</span></a>
+
                     </li>
                 </ul>
 
@@ -136,7 +149,7 @@ alert('Added fail. Please try again.');
                 <span class="m-r-sm text-muted welcome-message">Welcome to Clinica Abeleda</span>
             </li>
             <li>
-                <a href="login.html">
+                <a href="logout.php">
                     <i class="fa fa-sign-out"></i> Log out
                 </a>
             </li>
@@ -153,13 +166,9 @@ alert('Added fail. Please try again.');
                 <div class="row">
                     <div class="col-lg-12">
                         <h2 class="page-header">
-                        Doctor Schedule
+
                         </h2>
-                        <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-calendar"></i>
-                            </li>
-                        </ol>
+
                     </div>
                 </div>
                 <!-- Page Heading end-->
@@ -197,7 +206,7 @@ alert('Added fail. Please try again.');
                                </div>
                               </div>
                              </div>
-                             <div class="form-group form-group-lg">
+                             <!-- <div class="form-group form-group-lg">
                               <label class="control-label col-sm-2 requiredField" for="scheduleday">
                                Day
                                <span class="asteriskField">
@@ -229,7 +238,7 @@ alert('Added fail. Please try again.');
                                 </option>
                                </select>
                               </div>
-                             </div>
+                             </div> -->
                              <div class="form-group form-group-lg">
                               <label class="control-label col-sm-2 requiredField" for="starttime">
                                Start Time
@@ -321,7 +330,7 @@ alert('Added fail. Please try again.');
                             <tr class="filters">
                                 <th><input type="text" class="form-control" placeholder="scheduleId" disabled></th>
                                 <th><input type="text" class="form-control" placeholder="scheduleDate" disabled></th>
-                                <th><input type="text" class="form-control" placeholder="scheduleDay" disabled></th>
+                                <!-- <th><input type="text" class="form-control" placeholder="scheduleDay" disabled></th> -->
                                 <th><input type="text" class="form-control" placeholder="startTime." disabled></th>
                                 <th><input type="text" class="form-control" placeholder="endTime" disabled></th>
                                 <th><input type="text" class="form-control" placeholder="bookAvail" disabled></th>
@@ -329,7 +338,7 @@ alert('Added fail. Please try again.');
                         </thead>
 
                         <?php
-                        $result=mysqli_query($con,"SELECT * FROM doctorschedule");
+                        $result=mysqli_query($con,"SELECT * FROM doctorschedule ORDER BY scheduleId desc");
 
 
 
@@ -340,7 +349,7 @@ alert('Added fail. Please try again.');
                             echo "<tr>";
                                 echo "<td>" . $doctorschedule['scheduleId'] . "</td>";
                                 echo "<td>" . $doctorschedule['scheduleDate'] . "</td>";
-                                echo "<td>" . $doctorschedule['scheduleDay'] . "</td>";
+                                // echo "<td>" . $doctorschedule['scheduleDay'] . "</td>";
                                 echo "<td>" . $doctorschedule['startTime'] . "</td>";
                                 echo "<td>" . $doctorschedule['endTime'] . "</td>";
                                 echo "<td>" . $doctorschedule['bookAvail'] . "</td>";

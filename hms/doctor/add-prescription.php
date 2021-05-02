@@ -1,30 +1,34 @@
 <?php
 session_start();
 error_reporting(0);
+require "include/aes256.php";
 include('include/config.php');
 include('include/checklogin.php');
 check_login();
 if(isset($_POST['submit']))
   {
 
+
     $vid=$_GET['viewid'];
     $bp=$_POST['bp'];
     $labs=$_POST['labs'];
     $weight=$_POST['weight'];
     $temp=$_POST['temp'];
-   $pres=$_POST['pres'];
+    $pres=$_POST['pres'];
+
 
 
       $query.=mysqli_query($con, "insert   tblmedicalhistory(PatientID,BloodPressure,Laboratories,Weight,Temperature,MedicalPres)value('$vid','$bp','$labs','$weight','$temp','$pres')");
     if ($query) {
     echo '<script>alert("Medicle history has been added.")</script>';
     echo "<script>window.location.href ='view-patient.php?viewid=$vid'</script>";
+    mysqli_query ($con, $log);
+
   }
   else
     {
       echo '<script>alert("Something Went Wrong. Please try again")</script>';
     }
-
 
 }
 
@@ -33,7 +37,18 @@ if(isset($_POST['submit']))
 if (isset($_POST["addInvoice"]))
 	{
 
+
+    //for logs
+    $username = $_SESSION['dlogin'];
+    $id = $_SESSION['id'];
+    $userip = "Added Prescription";
+    $status = "1";
+
 		$patientID = $_GET['viewid'];
+
+
+    $log = "INSERT INTO userlog (uid,username,userip,status)
+           VALUES ('$uId','$username','$userip','$status')";
 
     $sql = "INSERT INTO prescriptions (patientID) VALUES ('$patientID')";
 		mysqli_query($con, $sql);
@@ -41,11 +56,23 @@ if (isset($_POST["addInvoice"]))
 
 		for ($a = 0; $a < count($_POST["Medication"]); $a++)
 		{
-			$sql = "INSERT INTO tblprescription (patientID, prescID, Medication, Type, Quantity, morningBM, morningAM, afternoonBM, afternoonAM, eveningBM, eveningAM, duration, instructions) VALUES ('$patientID', '$prescID', '" . $_POST["Medication"][$a] . "', '" . $_POST["Type"][$a] . "', '" . $_POST["Quantity"][$a] . "', '" . $_POST["morningBM"][$a] . "', '" . $_POST["morningAM"][$a] . "', '" . $_POST["afternoonBM"][$a] . "', '" . $_POST["afternoonAM"][$a] . "', '" . $_POST["eveningBM"][$a] . "', '" . $_POST["eveningAM"][$a] . "', '" . $_POST["duration"][$a] . "', '" . $_POST["instructions"][$a] . "')";
+			$sql = "INSERT INTO tblprescription (patientID, prescID, Medication, Type, Quantity, morningBM, morningAM, afternoonBM, afternoonAM, eveningBM, eveningAM, duration, instructions)
+      VALUES ('$patientID', '$prescID', '" . encryptthis($_POST["Medication"][$a], key) . "',
+      '" . encryptthis($_POST["Type"][$a], key) . "',
+      '" . encryptthis($_POST["Quantity"][$a], key) . "',
+      '" . encryptthis($_POST["morningBM"][$a], key) . "',
+      '" . encryptthis($_POST["morningAM"][$a], key) . "',
+      '" . encryptthis($_POST["afternoonBM"][$a], key) . "',
+      '" . encryptthis($_POST["afternoonAM"][$a], key) . "',
+      '" . encryptthis($_POST["eveningBM"][$a], key) . "',
+      '" . encryptthis($_POST["eveningAM"][$a], key) . "',
+      '" . encryptthis($_POST["duration"][$a], key) . "',
+      '" . encryptthis($_POST["instructions"][$a], key) . "')";
 			mysqli_query($con, $sql);
+      mysqli_query($con, $log);
 		}
 
-		echo "<p>Invoice has been added.</p>";
+		echo "<script>window.location.href ='view-prescription.php?viewid=$patientID&prescid=$prescID'</script>";
 	}
 
 ?>
@@ -120,7 +147,7 @@ if (isset($_POST["addInvoice"]))
 
   							</li>
                 <li>
-                    <a href="doctor-approved-appointments.html"><i class="fa fa-calendar"></i> <span class="nav-label">Appointments</span>  </a>
+                    <a href="appointment-history.php"><i class="fa fa-calendar"></i> <span class="nav-label">Appointments</span>  </a>
                 </li>
             </ul>
 
@@ -163,8 +190,15 @@ if (isset($_POST["addInvoice"]))
 					<?php
 	                             $vid=$_GET['viewid'];
 	                             $ret=mysqli_query($con,"select * from tblpatient where ID='$vid'");
-	$cnt=1;
-	while ($row=mysqli_fetch_array($ret)) {
+                            	$cnt=1;
+                            	while ($row=mysqli_fetch_array($ret))
+                              {
+                                $gender = decryptthis($row['PatientGender'], key);
+                                $patientContact=decryptthis($row['PatientContno'], key);
+                                $patadd=decryptthis($row['PatientAdd'], key);
+                                $patoccupt=decryptthis($row['PatientOccupation'], key);
+                                $patage=decryptthis($row['PatientAge'], key);
+                                $patbday=decryptthis($row['PatientBday'], key);
 	                             ?>
 
             <div class="ibox">
@@ -173,7 +207,7 @@ if (isset($_POST["addInvoice"]))
                         <div class="col-lg-12">
                             <div class="m-b-md">
 
-                                <h2><?php  echo $row['PatientName'];?></h2>
+                                <h2><?php  echo decryptthis($row['PatientName'], key);?></h2>
                             </div>
 
                         </div>
@@ -182,27 +216,27 @@ if (isset($_POST["addInvoice"]))
 	                      <div class="col-lg-6">
 	                          <dl class="row mb-0">
 	                              <div class="col-sm-4 text-sm-right"><dt>Gender:</dt> </div>
-	                              <div class="col-sm-8 text-sm-left"><dd class="mb-1"><?php  echo $row['PatientGender'];?></dd></div>
+	                              <div class="col-sm-8 text-sm-left"><dd class="mb-1"><?php  echo $gender;?></dd></div>
 	                          </dl>
 	                          <dl class="row mb-0">
 	                              <div class="col-sm-4 text-sm-right"><dt>Address:</dt> </div>
-	                              <div class="col-sm-8 text-sm-left"><dd class="mb-1"><?php  echo $row['PatientAdd'];?></dd> </div>
+	                              <div class="col-sm-8 text-sm-left"><dd class="mb-1"><?php  echo $patadd;?></dd> </div>
 	                          </dl>
 	                          <dl class="row mb-0">
 	                              <div class="col-sm-4 text-sm-right"><dt>Phone No:</dt> </div>
-	                              <div class="col-sm-8 text-sm-left"> <dd class="mb-1"><?php  echo $row['PatientContno'];?></dd></div>
+	                              <div class="col-sm-8 text-sm-left"> <dd class="mb-1"><?php  echo $patientContact;?></dd></div>
 	                          </dl>
 	                          <dl class="row mb-0">
 	                              <div class="col-sm-4 text-sm-right"><dt>Occupation:</dt> </div>
-	                              <div class="col-sm-8 text-sm-left"> <dd class="mb-1"><?php  echo $row['PatientOccupation'];?></dd></div>
+	                              <div class="col-sm-8 text-sm-left"> <dd class="mb-1"><?php  echo $patoccupt;?></dd></div>
 	                          </dl>
 	                          <dl class="row mb-0">
 	                              <div class="col-sm-4 text-sm-right"><dt>Date of Birth:</dt> </div>
-	                              <div class="col-sm-8 text-sm-left"> <dd class="mb-1"><?php echo date('F j, Y', strtotime($row['PatientBday']));?></dd></div>
+	                              <div class="col-sm-8 text-sm-left"> <dd class="mb-1"><?php echo date('F j, Y', strtotime($patbday));?></dd></div>
 	                          </dl>
 	                          <dl class="row mb-0">
 	                              <div class="col-sm-4 text-sm-right"> <dt>Age:</dt></div>
-	                              <div class="col-sm-8 text-sm-left"> <dd class="mb-1"> 	<?php  echo $row['PatientAge'];?> y/o </dd></div>
+	                              <div class="col-sm-8 text-sm-left"> <dd class="mb-1"> 	<?php  echo $patage;?> y/o </dd></div>
 	                          </dl>
 
 
@@ -351,8 +385,15 @@ if (isset($_POST["addInvoice"]))
 			// html += "<td>" + items + "</td>";
 			// html += "<td><input type='text' name='Medication[]'></td>";
 
-      html += "<td style='width:20%'><input type='text'  style='width:100%' name='Medication[]'></td>";
-	    html += "<td style='width:10%'><input type='text'  style='width:100%' name='Type[]'></td>";
+      // html += "<td style='width:20%'><input type='text'  style='width:100%' name='Medication[]'></td>";
+
+
+      html += "<td style='width:20%;'><select data-placeholder='Choose a Medicine...'  name='Medication[]' class='chosen-select'  tabindex='2'><?php $ret=mysqli_query($con,"select * from medicines"); while ($row=mysqli_fetch_array($ret)) {?><option value='<?php  echo $row['medicine_name'];?> <?php  echo $row['dosage'];?> (<?php  echo $row['formulation'];?>)'><?php  echo $row['medicine_name'];?> <?php  echo $row['dosage'];?> (<?php  echo $row['formulation'];?>)</option><?php } ?></select></td>";
+      html += "<td style='width:10%;'><select data-placeholder='Choose a Medicine...'  name='Type[]' class='chosen-select'  tabindex='2'><option value='Oral'>Oral</option><option value='Topical'>Topical</option></select></td>";
+
+
+
+	    // html += "<td style='width:10%'><input type='text'  style='width:100%' name='Type[]'></td>";
       html += "<td style='width:5%'><input type='text' style='width:100%' name='Quantity[]'></td>";
       html += "<td style='width:5%'><input type='text' style='width:100%' name='morningBM[]'></td>";
       html += "<td style='width:5%'><input type='text' style='width:100%' name='morningAM[]'></td>";
