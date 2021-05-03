@@ -38,7 +38,7 @@ if(isset($_POST['save']))
 	$eid=$_GET['editid'];
   $vid=$_GET['viewid'];
   $labs=encryptthis($_POST['labs'], key);
-  $weights=encryptthis($_POST['weight'], key);
+  $weight=encryptthis($_POST['weight'], key);
   $temp=$_POST['temp'];
   $pres=encryptthis($_POST['pres'], key);
 
