@@ -94,6 +94,7 @@ header("Location: index.php");
     <link href="appointment_plugins/css/date/style.css" rel="stylesheet">
     <link href="appointment_plugins/css/date/style1.css" rel="stylesheet">
     <link href="appointment_plugins/css/date/blocks.css" rel="stylesheet">
+
     <link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
     <link href="css/date/material.css" rel="stylesheet">-->
 
@@ -125,7 +126,7 @@ header("Location: index.php");
 	      <div class="fb-customerchat"
 	        attribution="page_inbox"
 	        page_id="103559001863075">
-	      </div>	
+	      </div>
 
 <div class="navbar-wrapper">
         <nav class="navbar navbar-default navbar-fixed-top navbar-expand-md" role="navigation">
@@ -372,12 +373,14 @@ header("Location: index.php");
             </div>
         </div>
         <div class="row features-block">
+
             <div class="col-lg-12">
                 <div id="vertical-timeline" class="vertical-container light-timeline center-orientation">
                     <div class="vertical-timeline-block">
                         <div class="vertical-timeline-icon navy-bg">
                             <i class="fa fa-briefcase"></i>
                         </div>
+
                         <div class="vertical-timeline-content">
                             <h2>Meeting</h2>
                             <p>Conference on the sales results for the previous year. Monica please examine sales trends in marketing and products. Below please find the current status of the sale.
@@ -386,10 +389,12 @@ header("Location: index.php");
                             <span class="vertical-date"> Today <br/> <small>Dec 24</small> </span>
                         </div>
                     </div>
+
                     <div class="vertical-timeline-block">
                         <div class="vertical-timeline-icon navy-bg">
                             <i class="fa fa-file-text"></i>
                         </div>
+
                         <div class="vertical-timeline-content">
                             <h2>Decision</h2>
                             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.</p>
@@ -397,10 +402,12 @@ header("Location: index.php");
                             <span class="vertical-date"> Tomorrow <br/> <small>Dec 26</small> </span>
                         </div>
                     </div>
+
                     <div class="vertical-timeline-block">
                         <div class="vertical-timeline-icon navy-bg">
                             <i class="fa fa-cogs"></i>
                         </div>
+
                         <div class="vertical-timeline-content">
                             <h2>Implementation</h2>
                             <p>Go to shop and find some products. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's. </p>
@@ -408,12 +415,17 @@ header("Location: index.php");
                             <span class="vertical-date"> Monday <br/> <small>Jan 02</small> </span>
                         </div>
                     </div>
+
                 </div>
             </div>
+
         </div>
     </div>
+
 </section>
+
 <section id="testimonials" class="navy-section testimonials" style="margin-top: 0">
+
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center wow zoomIn">
@@ -430,7 +442,9 @@ header("Location: index.php");
             </div>
         </div>
     </div>
+
 </section>
+
 <section class="comments gray-section" style="margin-top: 0">
     <div class="container">
         <div class="row">
@@ -457,6 +471,7 @@ header("Location: index.php");
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-4">
                 <div class="bubble">
                     "Uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
@@ -473,6 +488,7 @@ header("Location: index.php");
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-4">
                 <div class="bubble">
                     "Uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
@@ -489,9 +505,14 @@ header("Location: index.php");
                     </div>
                 </div>
             </div>
+
+
+
         </div>
     </div>
+
 </section>
+
 <section class="features">
     <div class="container">
         <div class="row">
@@ -530,6 +551,7 @@ header("Location: index.php");
             </div>
         </div>
     </div>
+
 </section>
 <section id="pricing" class="pricing">
     <div class="container">
@@ -572,6 +594,7 @@ header("Location: index.php");
                     </li>
                 </ul>
             </div>
+
             <div class="col-lg-4 wow zoomIn">
                 <ul class="pricing-plan list-unstyled selected">
                     <li class="pricing-title">
@@ -606,6 +629,7 @@ header("Location: index.php");
                     </li>
                 </ul>
             </div>
+
             <div class="col-lg-4 wow zoomIn">
                 <ul class="pricing-plan list-unstyled">
                     <li class="pricing-title">
@@ -644,6 +668,7 @@ header("Location: index.php");
             </div>
         </div>
     </div>
+
 </section>
 -->
 
