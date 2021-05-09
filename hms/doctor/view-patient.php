@@ -18,7 +18,7 @@ if(isset($_POST['submit']))
 
    $query.=mysqli_query($con, "insert   tblmedicalhistory(PatientID,BloodPressure,Laboratories,Weight,Temperature,MedicalPres)value('$vid','$bp','$labs','$weight','$temp','$pres')");
     if ($query) {
-    echo '<script>alert("Medicle history has been added.")</script>';
+    echo '<script>alert("Patient Information has been added.")</script>';
     echo "<script>window.location.href ='manage-patient.php'</script>";
   }
   else
@@ -230,7 +230,7 @@ if(isset($_POST['save']))
 
                           <dl class="row mb-0">
                               <div class="col-sm-4 text-sm-right">
-                                  <dt>Last Appointment:</dt>
+                                  <dt>Last Updated:</dt>
                               </div>
                               <div class="col-sm-8 text-sm-left">
                                   <dd class="mb-1"><?php  echo date('F j, Y g:i A', strtotime($row['UpdationDate']));?></dd>

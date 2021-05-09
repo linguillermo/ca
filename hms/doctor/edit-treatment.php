@@ -38,11 +38,11 @@ if(isset($_POST['save']))
 	$eid=$_GET['editid'];
   $vid=$_GET['viewid'];
   $labs=encryptthis($_POST['labs'], key);
-  $weights=encryptthis($_POST['weight'], key);
-  $temp=$_POST['temp'];
+  $weight=encryptthis($_POST['weight'], key);
+
   $pres=encryptthis($_POST['pres'], key);
 
-$sql=mysqli_query($con,"UPDATE tblmedicalhistory SET Laboratories='$labs',Weight='$weights',Temperature='$temp',MedicalPres='$pres' WHERE ID='$eid'");
+$sql=mysqli_query($con,"UPDATE tblmedicalhistory SET Laboratories='$labs',Weight='$weight',MedicalPres='$pres' WHERE ID='$eid'");
 if($sql)
 {
  echo "<script>alert('Patient info updated Successfully');</script>";
@@ -378,7 +378,7 @@ else {
 
 
                                                         <div class="col-md-2">
-                                                            <div><input name="weight" placeholder="Qty" class="form-control wd-450" id="qty"></div>
+                                                            <div><input name="qty" placeholder="Qty" class="form-control wd-450" id="qty"></div>
                                                         </div>
 
                                                         <div class="col-md-2">

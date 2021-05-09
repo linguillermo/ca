@@ -1,4 +1,6 @@
 <?php
+// $con = mysqli_connect("localhost","root","","hms");
+
 $con = mysqli_connect("localhost","u949229776_admin","CMA_adm1n","u949229776_hms");
 
 // Check connection
